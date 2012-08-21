@@ -45,6 +45,18 @@ execute "touch /home/vagrant/.hushlogin" do
   action :run
 end
 
+# Change timezone
+template "/etc/timezone" do
+  source "timezone.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+execute " sudo dpkg-reconfigure --frontend noninteractive tzdata" do
+  command " sudo dpkg-reconfigure --frontend noninteractive tzdata"
+  action :run
+end
+
 # build-essential
 require_recipe "build-essential"
 
