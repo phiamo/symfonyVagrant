@@ -29,6 +29,26 @@ end
   end
 end
 
+template "/etc/environment" do
+  source "environment.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables({
+    :environment => node["main"]["environment"],
+  })
+end
+
+template "/etc/hosts" do
+  source "hosts.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables({
+    :hosts => node["main"]["hosts"],
+  })
+end
+
 # bash profile
 %w{bashrc bash_profile}.each do |filename|
   template "/home/vagrant/." + filename do
@@ -91,6 +111,7 @@ require_recipe "php::module_mysql"
   end
 end
 
+# Supporting packages
 package "php5-intl" do
   action :install
   notifies :restart, resources(:service => "apache2"), :delayed
@@ -99,15 +120,26 @@ package "php-apc" do
   action :install
   notifies :restart, resources(:service => "apache2"), :delayed
 end
+package "php5-xdebug" do
+  action :install
+end
 
-# Pear/Pecl
+# PEAR/PECL
 php_pear "pear" do
   action :upgrade
 end
-%w{pear.symfony-project.com pear.phpunit.de components.ez.no}.each do |channel|
+%w{pear.symfony-project.com pear.phpunit.de components.ez.no pear.phing.info}.each do |channel|
   php_pear_channel channel do
     action :discover
   end
+end
+
+# PHP Packages using PEAR and PECL
+execute "install phing" do
+  user "root"
+  command "pear install phing/phing"
+  action :run
+  not_if "which phing"
 end
 execute "install phpunit" do
   user "root"
@@ -115,8 +147,11 @@ execute "install phpunit" do
   action :run
   not_if "which phpunit"
 end
-package "php5-xdebug" do
-  action :install
+execute "install PHP_CodeSniffer" do
+  user "root"
+  command "pear install --alldeps PHP_CodeSniffer"
+  action :run
+  not_if "which phpcs"
 end
 
 # Mysql

@@ -21,6 +21,12 @@ Vagrant::Config.run do |config|
 
     chef.json = {
 #      "main" => {
+#        "hosts" => [
+#          "127.0.0.1 yourhost.local"
+#        ],
+#        "environment" => [
+#          "SOMEKEY=somevar"
+#        ],
 #        "apache2" => {
 #          "vhost" => [{
 #            "name" => "project",
