@@ -6,7 +6,6 @@ default["main"]["apache2"]["vhost"] = []
 default["main"]["php"]["apache_conf_dir"]  = "/etc/php5/apache2"
 
 default["main"]["database"] = []
-
 default["main"]["dbuser"] = [{
     "name" => "root",
     "password" => "root",
@@ -16,6 +15,8 @@ default["main"]["dbuser"] = [{
 
 default["main"]["buildscript"] = []
 
-default["main"]["redis"] = true
-
-default["main"]["coffeescript"] = true
+default["main"]["python"] = false
+default["main"]["java"] = false
+default["main"]["mongodb"] = false
+default["main"]["redis"] = false
+default["main"]["coffeescript"] = false

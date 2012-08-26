@@ -128,7 +128,7 @@ end
 php_pear "pear" do
   action :upgrade
 end
-%w{pear.symfony-project.com pear.phpunit.de components.ez.no pear.phing.info}.each do |channel|
+%w{components.ez.no pear.pdepend.org pear.phing.info pear.phpmd.org pear.phpunit.de pear.symfony-project.com}.each do |channel|
   php_pear_channel channel do
     action :discover
   end
@@ -141,17 +141,35 @@ execute "install phing" do
   action :run
   not_if "which phing"
 end
-execute "install phpunit" do
+execute "install pear.phpunit.de/phploc" do
   user "root"
-  command "pear install --alldeps phpunit/PHPUnit"
+  command "pear install pear.phpunit.de/phploc"
   action :run
-  not_if "which phpunit"
+  not_if "which phploc"
+end
+execute "install pdepend/PHP_Depend-beta" do
+  user "root"
+  command "pear install pdepend/PHP_Depend-beta"
+  action :run
+  not_if "which pdepend"
+end
+execute "install phpmd/PHP_PMD" do
+  user "root"
+  command "pear install phpmd/PHP_PMD"
+  action :run
+  not_if "which phpmd"
 end
 execute "install PHP_CodeSniffer" do
   user "root"
-  command "pear install --alldeps PHP_CodeSniffer"
+  command "pear install PHP_CodeSniffer"
   action :run
   not_if "which phpcs"
+end
+execute "install phpunit" do
+  user "root"
+  command "pear install phpunit/PHPUnit"
+  action :run
+  not_if "which phpunit"
 end
 
 # Mysql
@@ -196,28 +214,34 @@ gem_package "sass" do
 end
 
 # Python
-require_recipe "python"
+if node["main"]["python"] == true
+    require_recipe "python"
+end
 
 # Java
-require_recipe "java"
+if node["main"]["java"] == true
+    require_recipe "java"
+end
 
 # MongoDB
-require_recipe "mongodb::default" 
-template "/etc/mongodb.conf" do
-  source "mongodb.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-execute "install php-mongodb" do
-  user "root"
-  command "pecl install -f mongo"
-  action :run
-end
-execute "restart mongodb" do
-  user "root"
-  command "/etc/init.d/mongodb restart"
-  action :run
+if node["main"]["mongodb"] == true
+    require_recipe "mongodb::default" 
+    template "/etc/mongodb.conf" do
+      source "mongodb.conf.erb"
+      owner "root"
+      group "root"
+      mode "0644"
+    end
+    execute "install php-mongodb" do
+      user "root"
+      command "pecl install -f mongo"
+      action :run
+    end
+    execute "restart mongodb" do
+      user "root"
+      command "/etc/init.d/mongodb restart"
+      action :run
+    end
 end
 
 # redis.io
