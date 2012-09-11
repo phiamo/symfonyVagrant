@@ -12,6 +12,7 @@ Vagrant::Config.run do |config|
   
   config.vm.host_name = "vagrant"
 
+  config.vm.share_folder "wwwdata", "/var/www/wwwdata", "wwwdata"
   #config.vm.share_folder "project", "/var/www/project", "../project"
 
   config.vm.customize ["modifyvm", :id, "--memory", 512]
