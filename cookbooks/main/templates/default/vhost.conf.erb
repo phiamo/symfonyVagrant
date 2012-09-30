@@ -13,5 +13,4 @@
 
   LogLevel info
   ErrorLog <%= node["apache"]["log_dir"] %>/<%= @params[:app_name] %>-error.log
-  CustomLog <%= node["apache"]["log_dir"] %>/<%= @params[:app_name] %>-access.log combined
 </VirtualHost>

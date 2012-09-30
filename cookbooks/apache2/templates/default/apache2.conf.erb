@@ -3,6 +3,7 @@
 #
 # Based on the Ubuntu apache2.conf
 
+ServerName localhost
 ServerRoot "<%= node['apache']['dir'] %>"
 
 #
@@ -166,6 +167,8 @@ LogFormat "%{Referer}i -> %U" referer
 LogFormat "%{User-agent}i" agent
 #
 
+CustomLog /dev/null combined
+
 # Customizable error responses come in three flavors:
 # 1) plain text 2) local redirects 3) external redirects
 #
@@ -228,7 +231,10 @@ LogFormat "%{User-agent}i" agent
 #    ErrorDocument 503 /error/HTTP_SERVICE_UNAVAILABLE.html.var
 #    ErrorDocument 506 /error/HTTP_VARIANT_ALSO_VARIES.html.var
 
-
+<Directory />
+    Options FollowSymLinks
+    AllowOverride none
+</Directory>
 
 # Include generic snippets of statements
 Include <%= node['apache']['dir'] %>/conf.d/

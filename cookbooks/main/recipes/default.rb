@@ -23,7 +23,7 @@ execute "apt-get update" do
 end
 
 # Install normal apt-get packages
-%w{vim man-db git-core ruby-dev php5-sqlite tofrodos}.each do |pkg|
+%w{vim man-db git-core ruby-dev tofrodos}.each do |pkg|
   package pkg do
     action :install
   end

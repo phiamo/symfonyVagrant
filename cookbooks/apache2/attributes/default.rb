@@ -98,7 +98,7 @@ end
 ###
 
 # General settings
-default['apache']['listen_ports'] = [ "80","443" ]
+default['apache']['listen_ports'] = [ "80" ]
 default['apache']['contact'] = "ops@example.com"
 default['apache']['timeout'] = 300
 default['apache']['keepalive'] = "On"
@@ -114,12 +114,12 @@ default['apache']['traceenable'] = "On"
 default['apache']['allowed_openids'] = Array.new
 
 # Prefork Attributes
-default['apache']['prefork']['startservers'] = 16
-default['apache']['prefork']['minspareservers'] = 16
-default['apache']['prefork']['maxspareservers'] = 32
-default['apache']['prefork']['serverlimit'] = 400
-default['apache']['prefork']['maxclients'] = 400
-default['apache']['prefork']['maxrequestsperchild'] = 10000
+default['apache']['prefork']['startservers'] = 1
+default['apache']['prefork']['minspareservers'] = 1
+default['apache']['prefork']['maxspareservers'] = 2
+default['apache']['prefork']['serverlimit'] = 8
+default['apache']['prefork']['maxclients'] = 8
+default['apache']['prefork']['maxrequestsperchild'] = 100
 
 # Worker Attributes
 default['apache']['worker']['startservers'] = 4
