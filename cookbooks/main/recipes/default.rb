@@ -6,6 +6,11 @@ r = execute "apt-get update" do
 end
 r.run_action(:run)
 
+r = gem_package "chef" do
+  action :nothing
+end
+r.run_action(:upgrade)
+
 template "/etc/apt/sources.list" do
   source "sources.list.erb"
   owner "root"
@@ -112,16 +117,11 @@ require_recipe "php::module_mysql"
 end
 
 # Supporting packages
-package "php5-intl" do
-  action :install
-  notifies :restart, resources(:service => "apache2"), :delayed
-end
-package "php-apc" do
-  action :install
-  notifies :restart, resources(:service => "apache2"), :delayed
-end
-package "php5-xdebug" do
-  action :install
+%w{php5-intl php-apc php5-gd php5-xdebug}.each do |pkg|
+  package pkg do
+    action :install
+    notifies :reload, resources(:service => "apache2"), :delayed
+  end
 end
 
 # PEAR/PECL
@@ -144,39 +144,41 @@ end
   end
 end
 
-# Mysql
-require_recipe "mysql"
-require_recipe "mysql::server"
-template "/etc/mysql/my.cnf" do
-  source "my.cnf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
-gem_package "mysql" do
-  action :install
-end
-
-# Databases
-require_recipe "database"
-mysql_connection_info = {:host => "localhost", :username => "root", :password => node["mysql"]["server_root_password"]}
-
-node["main"]["database"].each do |dbname|
-  mysql_database dbname do
-    connection mysql_connection_info
-    action :create
+# Mysql and Databases
+if node["main"]["mysql"] == true
+  require_recipe "mysql"
+  require_recipe "mysql::server"
+  template "/etc/mysql/my.cnf" do
+    source "my.cnf.erb"
+    owner "root"
+    group "root"
+    mode "0644"
   end
-end
-node["main"]["dbuser"].each do |user|
-  mysql_database_user user["name"] do
-    connection mysql_connection_info
-    password user["password"]
-    host user["host"]
-    database_name user["database_name"]
-    privileges user["privileges"]
-    action :create
-    action :grant
+
+  gem_package "mysql" do
+    action :install
+  end
+
+  # Databases
+  require_recipe "database"
+  mysql_connection_info = {:host => "localhost", :username => "root", :password => node["mysql"]["server_root_password"]}
+
+  node["main"]["database"].each do |dbname|
+    mysql_database dbname do
+      connection mysql_connection_info
+      action :create
+    end
+  end
+  node["main"]["dbuser"].each do |user|
+    mysql_database_user user["name"] do
+      connection mysql_connection_info
+      password user["password"]
+      host user["host"]
+      database_name user["database_name"]
+      privileges user["privileges"]
+      action :create
+      action :grant
+    end
   end
 end
 

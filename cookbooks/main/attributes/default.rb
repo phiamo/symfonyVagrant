@@ -15,6 +15,7 @@ default["main"]["dbuser"] = [{
 
 default["main"]["buildscript"] = []
 
+default["main"]["mysql"] = false
 default["main"]["python"] = false
 default["main"]["java"] = false
 default["main"]["mongodb"] = false

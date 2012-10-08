@@ -56,6 +56,7 @@ Vagrant::Config.run do |config|
 #        "buildscript" => [
 #          "python /var/www/project/bin/build.py"
 #        ],
+#        "mysql" => true,
 #        "python" => true,
 #        "java" => true,
 #        "mongodb" => true,
