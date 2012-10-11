@@ -1,16 +1,4 @@
 # Run apt-get update before the chef convergence stage
-r = execute "apt-get update" do
-  user "root"
-  command "apt-get update"
-  action :nothing
-end
-r.run_action(:run)
-
-r = gem_package "chef" do
-  action :nothing
-end
-r.run_action(:upgrade)
-
 template "/etc/apt/sources.list" do
   source "sources.list.erb"
   owner "root"
@@ -25,6 +13,10 @@ execute "apt-get update" do
   user "root"
   command "apt-get update"
   action :run
+end
+
+gem_package "chef" do
+  action :upgrade
 end
 
 # Install normal apt-get packages
@@ -121,26 +113,6 @@ end
   package pkg do
     action :install
     notifies :reload, resources(:service => "apache2"), :delayed
-  end
-end
-
-# PEAR/PECL
-php_pear "pear" do
-  action :upgrade
-end
-%w{components.ez.no pear.pdepend.org pear.phing.info pear.phpmd.org pear.phpunit.de pear.symfony-project.com}.each do |channel|
-  php_pear_channel channel do
-    action :discover
-  end
-end
-
-# PHP Packages using PEAR
-{"phing"=>"phing/phing", "phploc"=>"pear.phpunit.de/phploc", "pdepend"=>"pdepend/PHP_Depend", "phpmd" => "phpmd/PHP_PMD", "phpcs" => "PHP_CodeSniffer", "phpunit" => "phpunit/PHPUnit"}.each do |package,source|
-  execute "install " + package do
-    user "root"
-    command "pear install " + source
-    action :run
-    not_if "which " + package
   end
 end
 
