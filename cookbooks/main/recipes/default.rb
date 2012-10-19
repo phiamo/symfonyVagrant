@@ -1,20 +1,3 @@
-# Run apt-get update before the chef convergence stage
-template "/etc/apt/sources.list" do
-  source "sources.list.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-execute "new apt-key" do
-  command "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C"
-  action :run
-end
-execute "apt-get update" do
-  user "root"
-  command "apt-get update"
-  action :run
-end
-
 gem_package "chef" do
   action :upgrade
 end
@@ -26,6 +9,8 @@ end
   end
 end
 
+require_recipe "apt"
+
 template "/etc/environment" do
   source "environment.erb"
   owner "root"
@@ -36,14 +21,15 @@ template "/etc/environment" do
   })
 end
 
-template "/etc/hosts" do
-  source "hosts.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables({
-    :hosts => node["main"]["hosts"],
-  })
+apt_repository "php54" do
+  uri "http://ppa.launchpad.net/ondrej/php5/ubuntu"
+  distribution "lucid"
+  components ["main"]
+  keyserver "keyserver.ubuntu.com"
+  key "E5267A6C"
+  action :add
+  notifies :run, "execute[apt-get update]", :immediately
+  deb_src true
 end
 
 # bash profile
@@ -171,7 +157,8 @@ end
 
 # MongoDB
 if node["main"]["mongodb"] == true
-  require_recipe "mongodb::default" 
+  require_recipe "mongodb::10gen_repo"
+  require_recipe "mongodb::default"
   template "/etc/mongodb.conf" do
     source "mongodb.conf.erb"
     owner "root"
