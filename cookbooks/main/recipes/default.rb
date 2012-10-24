@@ -1,3 +1,11 @@
+# Run apt-get update before the chef convergence stage
+r = execute "apt-get update" do
+  user "root"
+  command "apt-get update"
+  action :nothing
+end
+r.run_action(:run)
+
 gem_package "chef" do
   action :upgrade
 end
