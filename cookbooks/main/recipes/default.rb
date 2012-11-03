@@ -17,7 +17,7 @@ end
   end
 end
 
-require_recipe "apt"
+include_recipe "apt"
 
 template "/etc/environment" do
   source "environment.erb"
@@ -69,11 +69,11 @@ execute " sudo dpkg-reconfigure --frontend noninteractive tzdata" do
 end
 
 # build-essential
-require_recipe "build-essential"
+include_recipe "build-essential"
 
 # Apache2
-require_recipe "apache2"
-require_recipe "apache2::mod_php5"
+include_recipe "apache2"
+include_recipe "apache2::mod_php5"
 
 node["main"]["apache2"]["vhost"].each do |vhost|
   web_app vhost["name"] do
@@ -90,8 +90,8 @@ execute "disable-default-site" do
 end
 
 # PHP5
-require_recipe "php"
-require_recipe "php::module_mysql"
+include_recipe "php"
+include_recipe "php::module_mysql"
 
 [node["main"]["php"]["apache_conf_dir"], node["php"]["conf_dir"]].each do |dir|
   template "#{dir}/php.ini" do
@@ -112,8 +112,8 @@ end
 
 # Mysql and Databases
 if node["main"]["mysql"] == true
-  require_recipe "mysql"
-  require_recipe "mysql::server"
+  include_recipe "mysql"
+  include_recipe "mysql::server"
   template "/etc/mysql/my.cnf" do
     source "my.cnf.erb"
     owner "root"
@@ -126,7 +126,7 @@ if node["main"]["mysql"] == true
   end
 
   # Databases
-  require_recipe "database"
+  include_recipe "database"
   mysql_connection_info = {:host => "localhost", :username => "root", :password => node["mysql"]["server_root_password"]}
 
   node["main"]["database"].each do |dbname|
@@ -155,18 +155,18 @@ end
 
 # Python
 if node["main"]["python"] == true
-  require_recipe "python"
+  include_recipe "python"
 end
 
 # Java
 if node["main"]["java"] == true
-  require_recipe "java"
+  include_recipe "java"
 end
 
 # MongoDB
 if node["main"]["mongodb"] == true
-  require_recipe "mongodb::10gen_repo"
-  require_recipe "mongodb::default"
+  include_recipe "mongodb::10gen_repo"
+  include_recipe "mongodb::default"
   template "/etc/mongodb.conf" do
     source "mongodb.conf.erb"
     owner "root"
@@ -187,14 +187,14 @@ end
 
 # redis.io
 if node["main"]["redis"] == true
-  require_recipe "redisio::install"
-  require_recipe "redisio::enable"
+  include_recipe "redisio::install"
+  include_recipe "redisio::enable"
 end
 
 # node.js
 if node["main"]["coffeescript"] == true
-  require_recipe "nodejs"
-  require_recipe "nodejs::npm"
+  include_recipe "nodejs"
+  include_recipe "nodejs::npm"
   
   execute "install coffeescript" do
     command "npm install -g coffee-script"
