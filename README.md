@@ -29,11 +29,10 @@ Install and boot vagrant basebox
 2. Install vagrant: http://www.vagrantup.com
 3. `cd /path/to/symfonyVagrant`
 4. `cp Vagrantfile.dist Vagrantfile`
-5. `vim Vagrantfile`
 6. `vagrant up`
 7. Wait (You can get a cup of coffee, this will take some time)
 
-Change the Vagrantfile according to your needs in step 5.
+Change the Vagrantfile according to your needs.
 
 Software avaiable
 -----------------
@@ -45,12 +44,14 @@ Chef installes the following software:
 
 * apache2 (including virtualhosts file)
 * php5
-* mysql (including database setup)
+* mysql (including database setup) (optional)
 * sass (Ruby gem)
-* python (you could either uncomment this
-* java
-* redis (this can be turned of, see Vagrantfile.dist)
-* node.js & coffeescript (this can be turned of, see Vagrantfile.dist)
+* python (optional)
+* java (optional)
+* mongodb (optional)
+* redis (optional)
+* node.js & coffeescript (optional)
+* [s3cmd tools](https://github.com/s3tools/s3cmd) (optional)
 
 It also executes any build script which can be defined as a command executed on command line, so you can use
 php, python, java (ant e.g.) or any other build script which can be executed through command line.
