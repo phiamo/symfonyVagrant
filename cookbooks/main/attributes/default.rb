@@ -21,3 +21,4 @@ default["main"]["java"] = false
 default["main"]["mongodb"] = false
 default["main"]["redis"] = false
 default["main"]["coffeescript"] = false
+default["main"]["s3tools"] = false

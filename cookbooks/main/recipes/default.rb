@@ -203,6 +203,11 @@ if node["main"]["coffeescript"] == true
   end
 end
 
+# s3tools
+if node["main"]["s3tools"] == true
+  include_recipe "main::s3cmd"
+end
+
 # Buildscripts
 if not File.exists?("/home/vagrant/installed")
   node["main"]["buildscript"].each do |buildCommand|
