@@ -8,9 +8,11 @@ This cookbooks aim to set up a out of the box working server to develop symfony2
 uses the following cookbooks authored by the guys at opscode (for more information see below):
 
 * apache2
+* apt
 * build-essential
 * database
 * java
+* mongodb
 * mysql
 * nodejs
 * openssl
