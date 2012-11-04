@@ -110,6 +110,13 @@ end
   end
 end
 
+# curl for php
+%w{libcurl3 libcurl3-dev php5-curl}.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 # Mysql and Databases
 if node["main"]["mysql"] == true
   include_recipe "mysql"
