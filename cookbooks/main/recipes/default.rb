@@ -206,7 +206,11 @@ if node["main"]["coffeescript"] == true
   execute "install coffeescript" do
     command "npm install -g coffee-script"
     action :run
-    not_if "which coffee"
+  end
+  
+  execute "install zombie" do
+    command "npm install -g zombie"
+    action :run
   end
 end
 
