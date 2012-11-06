@@ -29,6 +29,16 @@ template "/etc/environment" do
   })
 end
 
+template "/etc/hosts" do
+  source "hosts.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables({
+    :hosts => node["main"]["hosts"],
+  })
+end
+
 apt_repository "php54" do
   uri "http://ppa.launchpad.net/ondrej/php5/ubuntu"
   distribution "lucid"
