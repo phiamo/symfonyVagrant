@@ -115,18 +115,10 @@ if node["main"]["s3tools"] == true
 end
 
 # Buildscripts
-if not File.exists?("/home/vagrant/installed")
-  node["main"]["buildscript"].each do |buildCommand|
-    execute "buildscript" do
-      user "root"
-      command buildCommand
-      action :run
-    end
-  end
-  
-  execute "touch installed" do
-    user "vagrant"
-    command "touch /home/vagrant/installed"
+node["main"]["buildscript"].each do |buildCommand|
+  execute "buildscript" do
+    user "root"
+    command buildCommand
     action :run
   end
 end
