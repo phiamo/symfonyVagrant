@@ -9,3 +9,7 @@ execute "install zombie" do
   command "npm install -g zombie"
   action :run
 end
+execute "install uglifyjs" do
+  command "npm install -g uglify-js"
+  action :run
+end
