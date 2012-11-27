@@ -51,7 +51,7 @@ apt_repository "php54" do
 end
 
 # bash profile
-%w{bashrc bash_profile}.each do |filename|
+%w{bashrc bash_profile inputrc}.each do |filename|
   template "/home/vagrant/." + filename do
     source filename + ".erb"
     owner "vagrant"
