@@ -8,7 +8,7 @@ template "/etc/mongodb.conf" do
 end
 execute "install php-mongodb" do
   user "root"
-  command "pecl install -f mongo"
+  command "pecl install -f mongo-1.2.9"
   action :run
 end
 execute "restart mongodb" do
