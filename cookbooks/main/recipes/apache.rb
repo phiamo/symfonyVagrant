@@ -10,6 +10,12 @@ node["main"]["apache2"]["vhost"].each do |vhost|
     template vhost["template"]
   end
 end
+template "/etc/apache2/conf.d/apache2_virtualbox" do
+  source "apache2_virtualbox.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+end
 execute "disable-default-site" do
   command "sudo a2dissite default"
   notifies :restart, resources(:service => "apache2"), :delayed
